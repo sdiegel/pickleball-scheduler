@@ -48,7 +48,7 @@ export default function NewPostModal({
     const locationName = location.trim();
 
     // Try to find an existing location with the same name
-    let { data: locRow, error: locSelectErr } = await supabase
+    const { data: locRow, error: locSelectErr } = await supabase
       .from('locations')
       .select('id')
       .eq('name', locationName)
