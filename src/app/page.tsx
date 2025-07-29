@@ -4,12 +4,10 @@ import { useEffect, useState } from 'react';
 import { supabase } from '@/lib/supabaseClient';
 
 export default function HomePage() {
-  // null = still loading; number = count returned
   const [matchCount, setMatchCount] = useState<number | null>(null);
 
   useEffect(() => {
     const fetchCount = async () => {
-      // head: true returns only count, no rows
       const { count, error } = await supabase
         .from('matches')
         .select('*', { count: 'exact', head: true });
