@@ -10,7 +10,7 @@ type MatchRow = {
   notes: string | null;
   capacity: number;
   format: string;
-  locations: { name: string | null } | null;
+  locations?: { name: string | null } | null;
 };
 
 export default function MatchFeed({ initial }: { initial: MatchRow[] }) {
