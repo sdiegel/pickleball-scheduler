@@ -39,7 +39,10 @@ export default function MatchFeed({ initial }: { initial: MatchRow[] }) {
       )
       .subscribe();
 
-    return () => supabase.removeChannel(channel);
+    // Cleanup: unsubscribe on unmount
+    return () => {
+      supabase.removeChannel(channel).catch(() => {});
+    };
   }, [supabase]);
 
   return (
