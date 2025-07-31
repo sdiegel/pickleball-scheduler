@@ -5,7 +5,9 @@ import { useSession } from '@supabase/auth-helpers-react';
 import { createPagesBrowserClient } from '@supabase/auth-helpers-nextjs';
 
 import AuthModal from '@/components/AuthModal';
+import Button from '@/components/ui/Button';
 import NewPostModal from '@/components/NewPostModal';
+import ThemeToggle from '@/components/ui/ThemeToggle';
 
 export default function Header() {
   const session = useSession();
@@ -19,21 +21,12 @@ export default function Header() {
 
         {session ? (
           <div className="flex items-center gap-3">
-            <button
-              className="rounded bg-emerald-600 px-3 py-1 text-sm font-semibold text-white shadow hover:bg-emerald-700 transition"
-              onClick={() => setShowPostModal(true)}
-            >
-              New Post
-            </button>
-
+            <Button onClick={() => setShowPostModal(true)}>New Post</Button>
             <span className="text-sm">{session.user.email}</span>
-
-            <button
-              className="rounded bg-gray-200 px-2 py-1 text-xs"
-              onClick={() => supabase.auth.signOut()}
-            >
+            <Button variant="ghost" onClick={() => supabase.auth.signOut()}>
               Log out
-            </button>
+            </Button>
+            <ThemeToggle />
           </div>
         ) : (
           <AuthModal />

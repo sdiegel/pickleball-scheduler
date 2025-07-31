@@ -1,6 +1,8 @@
 'use client';
+
 import { useEffect, useState } from 'react';
 import { createPagesBrowserClient } from '@supabase/auth-helpers-nextjs';
+import MatchCard from '@/components/MatchCard';
 
 type MatchRow = {
   id: string;
@@ -8,43 +10,54 @@ type MatchRow = {
   notes: string | null;
   capacity: number;
   format: string;
+  locations: { name: string | null } | null;
 };
 
 export default function MatchFeed({ initial }: { initial: MatchRow[] }) {
   const [matches, setMatches] = useState<MatchRow[]>(initial);
   const supabase = createPagesBrowserClient();
 
+  // Debug: log matches whenever state updates
   useEffect(() => {
-    // Live INSERT listener
+    console.log('MATCHES ARRAY', matches);
+  }, [matches]);
+
+  // Realtime listener for new matches
+  useEffect(() => {
     const channel = supabase
       .channel('public:matches')
       .on(
         'postgres_changes',
         { event: 'INSERT', schema: 'public', table: 'matches' },
-        payload => {
-          setMatches(prev =>
+        (payload) =>
+          setMatches((prev) =>
             [...prev, payload.new as MatchRow].sort(
-              (a, b) => new Date(a.start_dt).getTime() - new Date(b.start_dt).getTime()
+              (a, b) =>
+                new Date(a.start_dt).getTime() - new Date(b.start_dt).getTime()
             )
-          );
-        }
+          )
       )
       .subscribe();
 
-    return () => { supabase.removeChannel(channel); };
+    return () => supabase.removeChannel(channel);
   }, [supabase]);
 
   return (
-    <section className="p-6">
-      <h1 className="mb-4 text-2xl font-bold">Bulletin Board</h1>
+    <section className="section">
+      <h1 className="h1">Bulletin Board</h1>
 
       {matches.length ? (
         <ul className="space-y-3">
-          {matches.map(m => (
-            <li key={m.id} className="rounded border p-4 shadow">
-              <p>{new Date(m.start_dt).toLocaleString()}</p>
-              <p className="text-sm text-gray-600">{m.notes}</p>
-            </li>
+          {matches.map((m) => (
+            <MatchCard
+              key={m.id}
+              id={m.id}
+              start_dt={m.start_dt}
+              notes={m.notes}
+              capacity={m.capacity}
+              format={m.format}
+              locationName={m.locations?.name ?? 'Unknown court'}
+            />
           ))}
         </ul>
       ) : (
