@@ -1,4 +1,17 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap');
 @import "tailwindcss";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html {
+  @apply text-[16px] leading-6 font-sans;
+  font-family: 'Inter', sans-serif;
+}
+
+.h1 { @apply text-2xl font-semibold mb-4; }
+.h2 { @apply text-xl font-semibold mb-3; }
+.text-body { @apply text-base leading-6; }
 
 :root {
   --background: #ffffff;
@@ -23,4 +36,36 @@ body {
   background: var(--background);
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
+}
+
+/* ---------- reusable atoms ---------- */
+.section {
+  @apply mx-auto max-w-xl p-6;
+}
+.btn {
+  @apply inline-flex items-center justify-center rounded-md font-medium transition;
+}
+.input {
+  @apply w-full rounded-md border border-gray-300 bg-gray-50 p-2
+         dark:border-gray-600 dark:bg-gray-800 dark:text-gray-100;
+}
+/*.input:focus {
+  @apply border-brand-dark ring-brand-dark;
+}*/
+.label {
+  @apply mb-1 block text-sm font-medium text-gray-700;
+}
+.card {
+  @apply rounded-lg border border-gray-200 bg-white p-4 shadow-sm dark:border-gray-700 dark:bg-gray-800;
+}
+.btn-primary {
+  @apply inline-flex items-center justify-center rounded-md
+         font-medium transition text-white shadow-sm;
+  /* fallback until config is sorted */
+  background-color: #059669;
+}
+.btn-primary:hover { background-color: #047857; }
+.btn-ghost {
+  @apply inline-flex items-center justify-center rounded-md font-medium transition
+         bg-transparent text-gray-900 hover:bg-gray-100;
 }
